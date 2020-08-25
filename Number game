@@ -1,0 +1,642 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+A1 DB 'ACEGIKMO'
+   DB 'BDFHJLNP'
+A2 DB '00000000'
+   DB '00000000'
+A3 DB '00000000'
+   DB '00000000'
+A4 DB '00000000'
+   DB '00000000' 
+ERROR DB 'ERROR! YOUR INPUT IS WRONG(ENTER LINE 1 OR 2)$ '
+MAINMENU DB 10,13,10,13,10,13,10,13,10,13,10,13
+         DB  10,13,9,9,9,"*****************************************"
+         DB  10,13,9,9,9,"**              MAIN MENU              **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**        SELECT THE DESIRE MANU       **"
+         DB  10,13,9,9,9,"**         1.NEW GAME                  **"
+         DB  10,13,9,9,9,"**         2.HELP                      **"
+         DB  10,13,9,9,9,"**         3.ABOUT                     **"
+         DB  10,13,9,9,9,"**         4.RULES                     **"
+         DB  10,13,9,9,9,"**         5.EXIT                      **"
+         DB  10,13,9,9,9,"*****************************************$"
+
+WELCOME  DB 10,13,10,13,10,13,10,13,10,13,10,13
+         DB  10,13,9,9,9,"*****************************************"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**              WELL COME              **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**     MEGIC GAME USING CONCEPTS OF    **"
+         DB  10,13,9,9,9,"**                                     **"                     
+         DB  10,13,9,9,9,"**             MATHEMETICS             **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"*****************************************$"
+ABOUT    DB 10,13,10,13,10,13,10,13,10,13,10,13
+         DB  10,13,9,9,9,"*****************************************"
+         DB  10,13,9,9,9,"**             PREPARED BY             **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                 ASAD                 **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**             (BITF 16)              **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"*****************************************$"
+HELP     DB 10,13,10,13,10,13,10,13,10,13,10,13
+         DB  10,13,9,9,9,"*****************************************"
+         DB  10,13,9,9,9,"**  IN THIS GAME A PLAYER SELECT A NUM **"
+         DB  10,13,9,9,9,"**  IN HIS MIND AND INPUT ONLY LINE NO **"
+         DB  10,13,9,9,9,"**  AND THIS PROGRAME WILL GIVE YOU    **"
+         DB  10,13,9,9,9,"**  CHARECTER YOU HAVE SELECTED.       **"
+         DB  10,13,9,9,9,"**  FIRST LINE IS REPRESENTING 1       **"
+         DB  10,13,9,9,9,"**  SECOND LINE IS REPRESENTING 2      **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"*****************************************$"
+RULES    DB 10,13,10,13,10,13,10,13,10,13,10,13
+         DB  10,13,9,9,9,"*****************************************"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**  1.ALWAYS GIVE RIGHT INPUT          **"
+         DB  10,13,9,9,9,"**  2.SELECT NO IN YOUR MIND           **"
+         DB  10,13,9,9,9,"**  3.GIVE INPUT AFTER CHECKING YOUR   **"
+         DB  10,13,9,9,9,"**   NUMBER IS IN CORRECT LINE         **"
+         DB  10,13,9,9,9,"**  4.DO NOT CHANGE YOUR NO AGAIN      **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"*****************************************$" 
+ THANKS  DB 10,13,10,13,10,13,10,13,10,13,10,13
+         DB  10,13,9,9,9,"*****************************************"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**          THANK YOU VERY MUCH        **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**             ALLAH HAFIZ             **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"**                                     **"
+         DB  10,13,9,9,9,"*****************************************$"        
+MSG2 DB 'Press n for next: $'  
+MSG3 DB 'Enter your choice: $ '
+MSG4 DB 'YOU HAVE SELECTED :$'
+     
+
+MSG DB 'ENTER THE NO OF LINE(1 or 2) IN WHICH YOUR CHARECTER IS PRESENT: $'    
+R DB 5
+C DB 36   
+.CODE
+MAIN PROC
+    MOV AX,@DATA
+    MOV DS,AX  
+MAINOPTION:
+        CALL COLOR
+        MOV AH,9
+        MOV DX,OFFSET WELCOME
+        INT 21H 
+        CALL ENTER
+        CALL ENTER
+        MOV AH,9
+        MOV DX,OFFSET MSG2
+        INT 21H
+        MOV AH,1
+        INT 21H
+        CMP AL,'n'
+        JNE MAINOPTION  
+M: 
+        CALL COLOR
+        MOV AH,9
+        MOV DX,OFFSET MAINMENU
+        INT 21H 
+        CALL ENTER
+        CALL ENTER
+        MOV AH,9
+        MOV DX,OFFSET MSG3
+        INT 21H
+        MOV AH,1
+        INT 21H
+        CMP AL,'1'
+        JNE NEXT1
+        JMP NEWGAME: 
+NEXT1:
+        CMP AL,'2'
+        JNE NEXT2
+        CALL COLOR
+        MOV AH,9
+        LEA DX,HELP
+        INT 21H
+        CALL ENTER
+        MOV AH,9
+        MOV DX,OFFSET MSG2
+        INT 21H 
+        MOV AH,1
+        INT 21H
+        JMP M
+NEXT2:
+        CMP AL,'3'
+        JNE NEXT3
+        CALL COLOR
+        MOV AH,9
+        LEA DX,ABOUT
+        INT 21H
+        CALL ENTER
+        MOV AH,9
+        MOV DX,OFFSET MSG2
+        INT 21H 
+        MOV AH,1
+        INT 21H
+        JMP M
+NEXT3:
+        CMP AL,'4'
+        JNE NEXT4
+        CALL COLOR
+        MOV AH,9
+        LEA DX,RULES
+        INT 21H
+        CALL ENTER
+        MOV AH,9
+        MOV DX,OFFSET MSG2
+        INT 21H 
+        MOV AH,1
+        INT 21H
+        JMP M
+NEXT4:
+        CMP AL,'5'
+        JE THANK
+        JMP M  
+NEWGAME:
+        CALL COLOR
+        CALL DISPLYA1
+    
+;************************************START 1 STEP******************************* 
+    
+START1:
+        CALL ENTER 
+        CALL ENTER
+        MOV AH,9
+        LEA DX,MSG
+        INT 21H
+        MOV AH,1
+        INT 21H 
+        CMP AL,'1'
+        JNE S1
+        CALL LINE1FOR1
+        CALL COLOR
+        CALL DISPLYA2
+        JMP START2
+S1:
+        CMP AL,'2'
+        JNE ERROR1
+        CALL LINE2FOR1
+        CALL COLOR
+        CALL DISPLYA2
+        JMP START2
+ERROR1:
+        MOV AH,2
+        MOV DL,1
+        INT 21H
+        MOV DL,13
+        INT 21H
+        MOV AH,9
+        LEA DX,ERROR
+        INT 21H
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        JMP START1
+    
+;************************************START 2 STEP*******************************
+   
+START2:
+        CALL ENTER 
+        CALL ENTER 
+        MOV AH,9
+        LEA DX,MSG
+        INT 21H
+        MOV AH,1
+        INT 21H 
+        CMP AL,'1'
+        JNE S2
+        CALL LINE1FOR2
+        CALL COLOR
+        CALL DISPLYA3
+        JMP START3
+S2:
+        CMP AL,'2'
+        JNE ERROR2
+        CALL LINE2FOR2
+        CALL COLOR
+        CALL DISPLYA3
+        JMP START3
+ERROR2:
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        MOV AH,9
+        LEA DX,ERROR
+        INT 21H
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        JMP START2
+   
+;************************************START 3 STEP*******************************
+  
+START3:
+        CALL ENTER 
+        CALL ENTER
+        MOV AH,9
+        LEA DX,MSG
+        INT 21H
+        MOV AH,1
+        INT 21H 
+        CMP AL,'1'
+        JNE S3
+        CALL LINE1FOR3
+        CALL COLOR
+        CALL DISPLYA4
+        JMP ENDPRO
+S3:
+        CMP AL,'2'
+        JNE ERROR3
+        CALL LINE2FOR3
+        CALL COLOR
+        CALL DISPLYA4
+        JMP ENDPRO
+ERROR3:
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        MOV AH,9
+        LEA DX,ERROR
+        INT 21H
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        JMP START3
+ENDPRO: 
+        CALL ENTER
+        CALL ENTER
+        MOV AH,9
+        LEA DX,MSG
+        INT 21H
+        MOV AH,1
+        INT 21H
+        CMP AL,'1'
+        JNE END
+        CALL COLOR
+        MOV AH,2
+        MOV DH,12
+        MOV DL,30
+        INT 10H
+        MOV AH,9
+        MOV DX,OFFSET MSG4 
+        INT 21H
+        MOV AH,2
+        MOV DL,[A4+2]
+        INT 21H 
+        MOV AH,1
+        INT 21H
+        JMP M
+END:
+        CALL COLOR
+        MOV AH,2
+        MOV DH,12
+        MOV DL,30
+        INT 10H 
+        MOV AH,9
+        MOV DX,OFFSET MSG4 
+        INT 21H
+        MOV AH,2
+        MOV DL,[A4+10]
+        INT 21H
+        MOV AH,1
+        INT 21H
+        JMP M
+          
+;************************************END PROGRAME*******************************
+   
+THANK:  
+        CALL COLOR
+        MOV AH,9
+        MOV DX,OFFSET THANKS 
+        INT 21H
+        MOV AH,1
+        INT 21H
+        MOV AH,4CH
+        INT 21H
+    MAIN ENDP  
+
+;******************************DISPLY ARY A1 FUNTION****************************
+    
+    DISPLYA1 PROC 
+        
+        MOV SI,OFFSET A1
+        MOV BX,SI
+        ADD BX,8
+        MOV CX,8
+FOR:
+        MOV AH,2
+        MOV DH,R
+        MOV DL,C
+        INT 10H
+        MOV AH,2
+        MOV DX,[SI]
+        INT 21H
+        MOV AH,2
+        MOV DL,9
+        INT 21H
+        MOV DX,[BX]
+        INT 21H
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        INC BX
+        INC SI
+        ADD R,2
+        LOOP FOR
+        MOV R,5
+        MOV C,36
+        RET
+    
+    DISPLYA1 ENDP
+    
+;******************************DISPLY ARY A2 FUNTION****************************
+    
+    DISPLYA2 PROC 
+        
+        MOV SI,OFFSET A2
+        MOV BX,SI
+        ADD BX,8
+        MOV CX,8
+FORA2:
+        MOV AH,2
+        MOV DH,R
+        MOV DL,C
+        INT 10H
+        MOV AH,2
+        MOV DX,[SI]
+        INT 21H
+        MOV AH,2
+        MOV DL,9
+        INT 21H
+        MOV DX,[BX]
+        INT 21H
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        INC BX
+        INC SI
+        ADD R,2
+        LOOP FORA2
+        MOV R,5
+        MOV C,36
+        RET
+        
+    DISPLYA2 ENDP
+    
+;******************************DISPLY ARY A3 FUNTION****************************
+    
+    DISPLYA3 PROC 
+        
+        MOV SI,OFFSET A3
+        MOV BX,SI
+        ADD BX,8
+        MOV CX,8
+FORA3:
+        MOV AH,2
+        MOV DH,R
+        MOV DL,C
+        INT 10H
+        MOV AH,2
+        MOV DX,[SI]
+        INT 21H
+        MOV AH,2
+        MOV DL,9
+        INT 21H
+        MOV DX,[BX]
+        INT 21H
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        INC BX
+        INC SI
+        ADD R,2
+        LOOP FORA3
+        MOV R,5
+        MOV C,36
+        RET
+        
+    DISPLYA3 ENDP
+    
+;******************************DISPLY ARY A4 FUNTION****************************
+    
+    DISPLYA4 PROC 
+        
+        MOV SI,OFFSET A4
+        MOV BX,SI
+        ADD BX,8
+        MOV CX,8
+FORA4:
+        MOV AH,2
+        MOV DH,R
+        MOV DL,C
+        INT 10H
+        MOV AH,2
+        MOV DX,[SI]
+        INT 21H
+        MOV AH,2
+        MOV DL,9
+        INT 21H
+        MOV DX,[BX]
+        INT 21H
+        MOV AH,2
+        MOV DL,10
+        INT 21H
+        MOV DL,13
+        INT 21H
+        INC BX
+        INC SI
+        ADD R,2
+        LOOP FORA4
+        MOV R,5
+        MOV C,36
+        RET
+        
+    DISPLYA4 ENDP
+    
+;*****************************CLEAR WINDOW TO ANY COLOR************************ 
+    
+    COLOR PROC 
+        
+               
+        MOV AH,2
+        MOV DX,0
+        MOV BH,0
+        INT 10H
+        MOV AH,9
+        MOV BH,0
+        MOV BL,11110000B       ;YOU CAN CHANGE COLOUR BY USING BL VALUE
+        MOV CX,2000H
+        MOV AL,20H
+        INT 10H
+        RET
+        
+    COLOR ENDP
+    
+;**************************LOOP FOR LINE 1 FOR 1 STEP**************************
+    
+    LINE1FOR1 PROC    
+      
+        MOV SI,7
+        MOV DI,0
+        MOV CX,8 
+        MOV BX,8
+L:
+        MOV AL,A1[SI]
+        MOV A2[DI],AL
+        INC DI
+        MOV AL,A1[SI+8]
+        MOV A2[DI],AL
+        INC DI
+        DEC SI
+        LOOP L 
+        RET
+        
+    LINE1FOR1 ENDP
+       
+;**************************LOOP FOR LINE 2 FOR 1 STEP**************************
+    
+    LINE2FOR1 PROC    
+      
+         MOV SI,15
+         MOV DI,0
+         MOV CX,8 
+         MOV BX,8
+L2:
+         MOV AL,A1[SI]
+         MOV A2[DI],AL
+         INC DI
+         MOV AL,A1[SI-8]
+         MOV A2[DI],AL
+         INC DI
+         DEC SI
+         LOOP L2 
+         RET
+         
+    LINE2FOR1 ENDP
+       
+;**************************LOOP FOR LINE 1 FOR 2 STEP**************************
+   
+    LINE1FOR2 PROC    
+     
+         MOV SI,7
+         MOV DI,0
+         MOV CX,8 
+         MOV BX,8
+LW:
+         MOV AL,A2[SI]
+         MOV A3[DI],AL
+         INC DI
+         MOV AL,A2[SI+8]
+         MOV A3[DI],AL
+         INC DI
+         DEC SI
+         LOOP LW 
+         RET
+         
+    LINE1FOR2 ENDP
+      
+;**************************LOOP FOR LINE 1 FOR 2 STEP**************************
+    
+    LINE2FOR2 PROC    
+       
+         MOV SI,15
+         MOV DI,0
+         MOV CX,8 
+         MOV BX,8
+LT:
+         MOV AL,A2[SI]
+         MOV A3[DI],AL
+         INC DI
+         MOV AL,A2[SI-8]
+         MOV A3[DI],AL
+         INC DI
+         DEC SI
+         LOOP LT 
+         RET
+         
+    LINE2FOR2 ENDP
+         
+;**************************LOOP FOR LINE 1 FOR 3 STEP**************************
+    
+    LINE1FOR3 PROC    
+     
+         MOV SI,7
+         MOV DI,0
+         MOV CX,8 
+         MOV BX,8
+LQ:
+         MOV AL,A3[SI]
+         MOV A4[DI],AL
+         INC DI
+         MOV AL,A3[SI+8]
+         MOV A4[DI],AL
+         INC DI
+         DEC SI
+         LOOP LQ 
+         RET
+         
+    LINE1FOR3 ENDP
+      
+;**************************LOOP FOR LINE 2 FOR 3 STEP**************************
+    
+    LINE2FOR3 PROC    
+        
+         MOV SI,15
+         MOV DI,0
+         MOV CX,8 
+         MOV BX,8
+LT1:
+         MOV AL,A3[SI]
+         MOV A4[DI],AL 
+         INC DI
+         MOV AL,A3[SI-8]
+         MOV A4[DI],AL
+         INC DI
+         DEC SI
+         LOOP LT1 
+         RET
+    LINE2FOR3 ENDP
+    
+;**********************************ENTER FUNCTION******************************    
+    
+    ENTER PROC 
+          
+         MOV AH,2
+         MOV DL,10
+         INT 21H
+         MOV DL,13
+         INT 21H
+         RET
+         
+    ENTER ENDP
+    
+END MAIN
